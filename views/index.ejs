@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <h1><%= title %></h1>
+    <p>EJS Welcome to <%= title %></p>
+
+    <% if (true) { %> 
+      <div> true </div>
+    <% } else { %>
+      <div> false </div>
+    <% } %>
+
+    <% for (var i = 0; i <= list.length; i++) { %>
+      <p><%= list[i] %></p>
+    <% } %>
+  </body>
+</html>
