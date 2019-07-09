@@ -12,7 +12,7 @@ const users = require('./routes/users')
 // error handler
 onerror(app)
 
-// middlewares
+// middlewares 配置post提交数据的中间件
 app.use(bodyparser({
   enableTypes:['json', 'form', 'text']
 }))
