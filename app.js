@@ -9,6 +9,10 @@ const logger = require('koa-logger')
 const index = require('./routes/index')
 const users = require('./routes/users')
 
+const pv = require('./middleware/koa-pv.js')
+const m1 = require('./middleware/m1.js')
+const m2 = require('./middleware/m2')
+const m3 = require('./middleware/m3.js')
 // error handler
 onerror(app)
 
@@ -23,6 +27,11 @@ app.use(require('koa-static')(__dirname + '/public'))
 app.use(views(__dirname + '/views', {
   extension: 'ejs'
 }))
+
+app.use(pv());
+app.use(m1());
+app.use(m2());
+app.use(m3());
 // session
 const session = require('koa-session')
 app.keys = ['some secret hurr']
@@ -46,7 +55,8 @@ app.use(async (ctx, next) => {
 })
 
 // routes
-// index.routes()启动路由。index.allowedMethods用在了index.routes()之后，表示在当所有路由中间件最后调用，此时根据ctx.status设置response响应头
+// index.routes()启动路由。
+// index.allowedMethods用在了index.routes()之后，表示在当所有路由中间件最后调用，此时根据ctx.status设置response响应头
 app.use(index.routes(), index.allowedMethods())
 app.use(users.routes(), users.allowedMethods())
 
