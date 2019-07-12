@@ -8,11 +8,7 @@ const logger = require('koa-logger')
 
 const index = require('./routes/index')
 const users = require('./routes/users')
-
-const pv = require('./middleware/koa-pv.js')
-const m1 = require('./middleware/m1.js')
-const m2 = require('./middleware/m2')
-const m3 = require('./middleware/m3.js')
+const { connect, initSchemas } = require('./server/dbs/init.js')
 // error handler
 onerror(app)
 
@@ -28,10 +24,6 @@ app.use(views(__dirname + '/views', {
   extension: 'ejs'
 }))
 
-app.use(pv());
-app.use(m1());
-app.use(m2());
-app.use(m3());
 // session
 const session = require('koa-session')
 app.keys = ['some secret hurr']
@@ -60,6 +52,12 @@ app.use(async (ctx, next) => {
 app.use(index.routes(), index.allowedMethods())
 app.use(users.routes(), users.allowedMethods())
 
+
+// 数据库
+;(async () => {
+  await connect()
+  initSchemas()
+})()
 // error-handling
 app.on('error', (err, ctx) => {
   console.error('server error', err, ctx)
