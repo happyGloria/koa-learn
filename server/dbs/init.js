@@ -8,7 +8,6 @@ const { resolve } = require('path')
 exports.initSchemas = () => {
   glob.sync(resolve(__dirname, './models', '**/*.js')).forEach(require)
 }
-
 exports.connect = () => {
   // 连接数据库
   mongoose.connect(dbs, {

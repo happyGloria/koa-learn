@@ -1,8 +1,8 @@
 // pv 统计功能
 // 1. 声明一个函数，用来执行app的处理过程
 function pv(ctx) {
+  ctx.session.count++
   global.console.log('pv中间件：', ctx.path);
-
 }
 
 // 2. 导出处理过程，导出一个函数，这是因为外层引用会写成 app.use(pv())

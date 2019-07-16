@@ -6,6 +6,9 @@ const onerror = require('koa-onerror')
 const bodyparser = require('koa-bodyparser')
 const logger = require('koa-logger')
 
+const session = require('koa-generic-session')
+const redisStore = require('koa-redis')
+const koaPV = require('./middleware/koa-pv.js')
 const index = require('./routes/index')
 const users = require('./routes/users')
 const { connect, initSchemas } = require('./server/dbs/init.js')
@@ -24,7 +27,10 @@ app.use(views(__dirname + '/views', {
   extension: 'ejs'
 }))
 
-// session
+/* app.use(session)
+app.use(Redis) */
+
+/* // session
 const session = require('koa-session')
 app.keys = ['some secret hurr']
 const CONFIG = {
@@ -36,8 +42,18 @@ const CONFIG = {
   rolling: true, // 在每次请求时强行设置cookie, 将重置cookie过期时间（默认false）
   renew: false // when session is nearly expired
 }
-app.use(session(CONFIG, app))
+app.use(session(CONFIG, app)) */
 // session-end
+
+// redis-start
+app.keys = ['keys', 'keykeys']
+app.use(session({
+  key: 'mt',
+  prefix: 'mtpr',
+  store: new redisStore() // 存储session
+}))
+app.use(koaPV())
+// redis-end
 // logger
 app.use(async (ctx, next) => {
   const start = new Date()
@@ -51,7 +67,6 @@ app.use(async (ctx, next) => {
 // index.allowedMethods用在了index.routes()之后，表示在当所有路由中间件最后调用，此时根据ctx.status设置response响应头
 app.use(index.routes(), index.allowedMethods())
 app.use(users.routes(), users.allowedMethods())
-
 
 // 数据库
 ;(async () => {

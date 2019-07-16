@@ -5,6 +5,7 @@ let personSchema = new mongoose.Schema({
 }, {
   collection: 'person'
 });
-// 发布模型
 
+// 发布模型
 mongoose.model('Person', personSchema);
+console.log('personModel发布成功')
